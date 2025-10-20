@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ระบบบริหารโครงการ | โรงพยาบาลมหาวิทยาลัยพะเยา</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600&display=swap">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: "Prompt", sans-serif; background-color: #f6f8fc; margin:0; padding:0; }
+    .container { max-width: 1000px; margin: 40px auto; background:white; padding:30px; border-radius:16px; box-shadow:0 4px 12px rgba(0,0,0,0.1); }
+
+    /* Navbar */
+    nav { display:flex; align-items:center; background-color:#4b0082; padding:10px 20px; color:white; justify-content:space-between; }
+    nav img { height:50px; }
+    .nav-buttons { display:flex; gap:15px; }
+    .nav-buttons button { background-color:#5c11a3; color:white; border:none; padding:8px 16px; border-radius:8px; cursor:pointer; transition:0.3s; }
+    .nav-buttons button:hover { background-color:#7b1dd5; }
+
+    .hidden { display:none; }
+
+    h1,h2 { color:#4b0082; text-align:center; }
+
+    /* Cards */
+    .cards { display:flex; flex-wrap:wrap; gap:20px; justify-content:center; margin-top:20px; }
+    .card { flex:1 1 200px; background:#fff; padding:20px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.1); text-align:center; }
+    .card h3 { margin:10px 0; color:#4b0082; }
+    .card p { font-size:1.2em; font-weight:bold; }
+
+    /* Table */
+    table { width:100%; border-collapse:collapse; margin-top:20px; }
+    table, th, td { border:1px solid #ccc; }
+    th, td { padding:10px; text-align:center; }
+    th { background-color:#4b0082; color:white; }
+
+    /* Form */
+    label { font-weight:bold; display:block; margin-top:15px; }
+    input, textarea, select, button { width:100%; padding:10px; margin-top:5px; border-radius:8px; border:1px solid #ccc; }
+    button.submit { background:#4b0082; color:white; border:none; padding:12px 20px; border-radius:10px; margin-top:20px; cursor:pointer; }
+    button.submit:hover { background:#5c11a3; }
+
+    canvas { margin-top:40px; }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav>
+    <img src="https://healthserv.net/imghosp/hspmbz11020e240616093707.webp" alt="UP Logo">
+    <div class="nav-buttons">
+      <button onclick="showTab('dashboard')">หน้าหลัก</button>
+      <button onclick="showTab('report')">รายงานผลโครงการ</button>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <!-- Dashboard Tab -->
+    <div id="dashboard">
+      <h1>Dashboard การดำเนินงานโครงการ</h1>
+
+      <!-- Cards -->
+      <div class="cards" id="summaryCards">
+        <!-- การ์ด KPI / งบประมาณ / จำนวนโครงการ -->
+      </div>
+
+      <h2>แผนการดำเนินงานทั้งหมด</h2>
+      <table id="projectTable">
+        <thead>
+          <tr>
+            <th>ชื่อโครงการ</th>
+            <th>ยุทธศาสตร์</th>
+            <th>เป้าหมาย</th>
+            <th>KPI</th>
+            <th>หน่วยงาน</th>
+            <th>งบประมาณ (บาท)</th>
+            <th>ระยะเวลา</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+      <h2>สรุปงบประมาณตามยุทธศาสตร์</h2>
+      <canvas id="budgetChart" width="400" height="200"></canvas>
+    </div>
+
+    <!-- Report Tab -->
+    <div id="report" class="hidden">
+      <h1>แบบฟอร์มบันทึกข้อมูลโครงการตามแผนยุทธศาสตร์</h1>
+
+      <form id="projectForm">
+        <label>ชื่อโครงการ</label>
+        <input type="text" id="projectName" required>
+
+        <label>ยุทธศาสตร์ที่</label>
+        <select id="strategy">
+          <option>ยุทธศาสตร์ที่ 1 : Modernized Human Capital</option>
+          <option>ยุทธศาสตร์ที่ 2 : Excellence of Service & Healthcare</option>
+          <option>ยุทธศาสตร์ที่ 3 : Digital Technology for AI Transformation</option>
+          <option>ยุทธศาสตร์ที่ 4 : Uplifting Management Organization</option>
+          <option>ยุทธศาสตร์ที่ 5 : Professional for Academic & Research</option>
+        </select>
+
+        <label>วัตถุประสงค์เชิงกลยุทธ์ (SO)</label>
+        <input type="text" id="objective">
+
+        <label>เป้าหมาย</label>
+        <input type="text" id="goal">
+
+        <label>KPI</label>
+        <input type="text" id="kpi">
+
+        <label>หน่วยงาน/ผู้รับผิดชอบ</label>
+        <input type="text" id="department">
+
+        <label>งบประมาณ (บาท)</label>
+        <input type="number" id="budget">
+
+        <label>ระยะเวลาโครงการ</label>
+        <input type="text" id="duration" placeholder="เช่น ม.ค. - มิ.ย. 2568">
+
+        <label>ผลลัพธ์ที่คาดหวัง</label>
+        <textarea id="outcome" rows="3"></textarea>
+
+        <button type="submit" class="submit">ส่งข้อมูล</button>
+      </form>
+
+      <p id="msg" style="text-align:center; color:green; font-weight:bold; margin-top:10px;"></p>
+    </div>
+  </div>
+
+<script>
+  // --- Tab Function ---
+  function showTab(tab) {
+    document.getElementById('dashboard').classList.add('hidden');
+    document.getElementById('report').classList.add('hidden');
+    document.getElementById(tab).classList.remove('hidden');
+  }
+
+  // --- Fetch Data & Render Dashboard ---
+  async function fetchData() {
+    const response = await fetch("https://script.google.com/macros/s/YOUR_DEPLOYED_SCRIPT_ID/exec?action=getData");
+    const data = await response.json();
+    return data;
+  }
+
+  function renderSummaryCards(data) {
+    const cardsContainer = document.getElementById("summaryCards");
+    cardsContainer.innerHTML = "";
+
+    // คำนวณข้อมูลสรุป
+    const totalProjects = data.length;
+    const totalBudget = data.reduce((sum,item)=>sum+(parseFloat(item.budget)||0),0);
+    const kpiSet = new Set(data.map(item=>item.kpi).filter(Boolean));
+
+    const cardData = [
+      { title:"จำนวนโครงการ", value:totalProjects, color:"#4b0082" },
+      { title:"งบประมาณรวม (บาท)", value:totalBudget.toLocaleString(), color:"#5c11a3" },
+      { title:"KPI ทั้งหมด", value:kpiSet.size, color:"#7b1dd5" }
+    ];
+
+    cardData.forEach(c=>{
+      const div = document.createElement("div");
+      div.className="card";
+      div.style.borderTop=`4px solid ${c.color}`;
+      div.innerHTML=`<h3>${c.title}</h3><p>${c.value}</p>`;
+      cardsContainer.appendChild(div);
+    });
+  }
+
+  function renderTable(data) {
+    const tbody = document.querySelector("#projectTable tbody");
+    tbody.innerHTML = "";
+    data.forEach(item => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${item.projectName}</td>
+        <td>${item.strategy}</td>
+        <td>${item.goal}</td>
+        <td>${item.kpi}</td>
+        <td>${item.department}</td>
+        <td>${item.budget}</td>
+        <td>${item.duration}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function renderChart(data) {
+    const strategyMap = {};
+    data.forEach(item=>{
+      if(!strategyMap[item.strategy]) strategyMap[item.strategy]=0;
+      strategyMap[item.strategy]+=parseFloat(item.budget)||0;
+    });
+
+    const ctx = document.getElementById("budgetChart").getContext("2d");
+    new Chart(ctx,{
+      type:"bar",
+      data:{
+        labels:Object.keys(strategyMap),
+        datasets:[{
+          label:'งบประมาณรวม (บาท)',
+          data:Object.values(strategyMap),
+          backgroundColor:[
+            "#4b0082","#5c11a3","#7b1dd5","#9c4dcc","#b874ff"
+          ]
+        }]
+      },
+      options:{
+        responsive:true,
+        plugins:{
+          legend:{ display:false },
+          title:{ display:true, text:'งบประมาณรวมต่อยุทธศาสตร์' }
+        }
+      }
+    });
+  }
+
+  async function init() {
+    const data = await fetchData();
+    renderSummaryCards(data);
+    renderTable(data);
+    renderChart(data);
+  }
+
+  init();
+
+  // --- Form Submission ---
+  const form = document.getElementById("projectForm");
+  const msg = document.getElementById("msg");
+
+  form.addEventListener("submit", async (e)=>{
+    e.preventDefault();
+    msg.textContent="กำลังบันทึกข้อมูล...";
+
+    const data={
+      projectName: form.projectName.value,
+      strategy: form.strategy.value,
+      objective: form.objective.value,
+      goal: form.goal.value,
+      kpi: form.kpi.value,
+      department: form.department.value,
+      budget: form.budget.value,
+      duration: form.duration.value,
+      outcome: form.outcome.value
+    };
+
+    await fetch("https://script.google.com/macros/s/AKfycbz4-1-Nc70AS-DpknR_e0vfXZsQew8q1lZRhlvT8YExJxBgd6ms0sRvvuIV_1zGFihYeg/exec",{
+      method:"POST",
+      body: JSON.stringify(data)
+    });
+
+    msg.textContent="✅ บันทึกสำเร็จแล้ว!";
+    form.reset();
+
+    init(); // Refresh dashboard
+    showTab('dashboard'); // กลับไป Dashboard อัตโนมัติ
+  });
+</script>
+
+</body>
+</html>
+ติดต่อสอบถาม สิทธิพล ใจเย็น (เบ็ค) งานแผนและพัสดุ 093-715-7167
