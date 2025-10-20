@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>แบบฟอร์มบันทึกข้อมูลโครงการ | โรงพยาบาลมหาวิทยาลัยพะเยา</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: "Prompt", sans-serif;
+      background-color: #f6f8fc;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    header img {
+      width: 90px;
+    }
+    h1 {
+      font-size: 22px;
+      color: #4b0082;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 15px;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background: #4b0082;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #5c11a3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <img src="https://upload.wikimedia.org/wikipedia/th/3/34/University_of_Phayao_Logo.png" alt="UP Logo" />
+      <h1>แบบฟอร์มบันทึกข้อมูลโครงการตามแผนยุทธศาสตร์<br>โรงพยาบาลมหาวิทยาลัยพะเยา</h1>
+    </header>
+
+    <form id="projectForm">
+      <label>ชื่อโครงการ</label>
+      <input type="text" id="projectName" required>
+
+      <label>ยุทธศาสตร์ที่</label>
+      <select id="strategy">
+        <option>ยุทธศาสตร์ที่ 1 : Modernized Human Capital</option>
+        <option>ยุทธศาสตร์ที่ 2 : Excellence of Service & Healthcare</option>
+        <option>ยุทธศาสตร์ที่ 3 : Digital Technology for AI Transformation</option>
+        <option>ยุทธศาสตร์ที่ 4 : Uplifting Management Organization</option>
+        <option>ยุทธศาสตร์ที่ 5 : Professional for Academic & Research</option>
+      </select>
+
+      <label>วัตถุประสงค์เชิงกลยุทธ์ (SO)</label>
+      <input type="text" id="objective">
+
+      <label>เป้าหมาย</label>
+      <input type="text" id="goal">
+
+      <label>KPI</label>
+      <input type="text" id="kpi">
+
+      <label>หน่วยงาน/ผู้รับผิดชอบ</label>
+      <input type="text" id="department">
+
+      <label>งบประมาณ (บาท)</label>
+      <input type="number" id="budget">
+
+      <label>ระยะเวลาโครงการ</label>
+      <input type="text" id="duration" placeholder="เช่น ม.ค. - มิ.ย. 2568">
+
+      <label>ผลลัพธ์ที่คาดหวัง</label>
+      <textarea id="outcome" rows="3"></textarea>
+
+      <button type="submit">ส่งข้อมูล</button>
+    </form>
+
+    <p id="msg" style="text-align:center; color:green; font-weight:bold; margin-top:10px;"></p>
+  </div>
+
+  <script>
+    const form = document.getElementById("projectForm");
+    const msg = document.getElementById("msg");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      msg.textContent = "กำลังบันทึกข้อมูล...";
+
+      const data = {
+        projectName: form.projectName.value,
+        strategy: form.strategy.value,
+        objective: form.objective.value,
+        goal: form.goal.value,
+        kpi: form.kpi.value,
+        department: form.department.value,
+        budget: form.budget.value,
+        duration: form.duration.value,
+        outcome: form.outcome.value,
+      };
+
+      await fetch("https://script.google.com/macros/s/AKfycbyp5zlTjHNp1kGUyQl7smgKx-rqhAhh4no3kv2o3lBcdZn-4HTgZiExd0eePP-uuEAYEw/exec", {
+        method: "POST",
+        body: JSON.stringify(data),
+      });
+
+      msg.textContent = "✅ บันทึกสำเร็จแล้ว!";
+      form.reset();
+    });
+  </script>
+</body>
+</html>
+Add main website page
