@@ -172,7 +172,7 @@
 
   // --- Fetch Data & Render Dashboard ---
   async function fetchData() {
-    const response = await fetch("https://script.google.com/macros/s/AKfycbxXHK0ZGltpHOPYiJfy_rMW4B4CdDyB4a-wT9jt1DLq8dOXwvRE2pBMm9V4KE4JTxY4ag/exec?action=getData");
+    const response = await fetch("https://script.google.com/macros/s/AKfycbwRGUdp_s1dlLoHhvzUYFCF8ceu4wLVPBrPWrY8Nx9OizIBwPz_AnyqaLCiwHheimeIog/exec?action=getData");
     const data = await response.json();
     return data;
   }
@@ -274,7 +274,7 @@
       data[el.id]=el.value;
     });
 
-    await fetch("https://script.google.com/macros/s/AKfycbxHVpiPeDGSiA8Fz2LTMfIrWTs0DKpNJ8zq2y-gwqEOFJx4VQoPXLs04xBKN5jY-gLq7g/exec",{
+    await fetch("https://script.google.com/macros/s/AKfycbwRGUdp_s1dlLoHhvzUYFCF8ceu4wLVPBrPWrY8Nx9OizIBwPz_AnyqaLCiwHheimeIog/exec",{
       method:"POST",
       body: JSON.stringify(data)
     }); 
