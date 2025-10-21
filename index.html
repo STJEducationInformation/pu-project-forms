@@ -108,7 +108,7 @@
         
         <div class="section-title">ส่วนที่ 1 : ข้อมูลทั่วไปของโครงการ</div>
         <label>1. ชื่อโครงการ</label><input type="text" id="projectName" required>
-        <label>2. รหัสโครงการ</label><input type="text" id="projectCode">
+        <label>2. รหัสโครงการ</label><input type="text" placeholder="ไม่มี ไม่ต้องใส่" id="projectCode">
         <label>3. สังกัด/หน่วยงานรับผิดชอบหลัก</label><input type="text" id="department">
         <label>4. ผู้รับผิดชอบโครงการ</label><input type="text" id="responsiblePerson">
         <label>5. หน่วยงานร่วมดำเนินการ</label><input type="text" id="collaborators">
@@ -172,7 +172,7 @@
 
   // --- Fetch Data & Render Dashboard ---
   async function fetchData() {
-    const response = await fetch("https://script.google.com/macros/s/YOUR_DEPLOYED_SCRIPT_ID/exec?action=getData");
+    const response = await fetch("https://script.google.com/macros/s/AKfycbxXHK0ZGltpHOPYiJfy_rMW4B4CdDyB4a-wT9jt1DLq8dOXwvRE2pBMm9V4KE4JTxY4ag/exec?action=getData");
     const data = await response.json();
     return data;
   }
@@ -274,16 +274,33 @@
       data[el.id]=el.value;
     });
 
-    await fetch("https://script.google.com/macros/s/AKfycbz4-1-Nc70AS-DpknR_e0vfXZsQew8q1lZRhlvT8YExJxBgd6ms0sRvvuIV_1zGFihYeg/exec",{
+    await fetch("https://script.google.com/macros/s/AKfycbxXHK0ZGltpHOPYiJfy_rMW4B4CdDyB4a-wT9jt1DLq8dOXwvRE2pBMm9V4KE4JTxY4ag/exec",{
       method:"POST",
       body: JSON.stringify(data)
-    });
+    }); 
 
     msg.textContent="✅ บันทึกสำเร็จแล้ว!";
     form.reset();
     init();
     showTab('dashboard');
   });
+	
+ function downloadPDF() {
+    const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+    doc.setFont("THSarabun", "normal");
+    doc.setFontSize(16);
+    doc.text("แบบฟอร์มสำรวจรายละเอียดโครงการ", 20, 20);
+    let y = 30;
+    document.querySelectorAll("#projectForm input, #projectForm textarea, #projectForm select").forEach(el => {
+      if (el.value.trim()) {
+        doc.text(`${el.previousElementSibling.innerText}: ${el.value}`, 20, y);
+        y += 8;
+        if (y > 270) { doc.addPage(); y = 20; }
+      }
+    });
+    doc.save("แบบฟอร์มโครงการ.pdf");
+  }
+
 </script>
 
 </body>
