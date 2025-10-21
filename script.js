@@ -5,7 +5,7 @@
    - render ตาราง, edit (fill form), delete
 */
 
-const API_URL = "https://script.google.com/macros/s/AKfycbxW3nGIxG15mIJRyB8X_ebOCZxUNLIHx8fgAEwWRry-03Q7qvGSQwSq-eUvhKKwJD-YsA/exec"; // <<== แก้เป็นของคุณ
+const API_URL = "https://script.google.com/macros/s/AKfycbx0jQEORVOgp-Xb6Hw5pTuQR82RLFNy7Fu81Hi5GuI0cHy9nE8_-LYk-ee1J7cmH9jq5Q/exec"; // <<== แก้เป็นของคุณ
 
 /* ----------------- Helpers: callApi ----------------- */
 async function callApi(action, payload = {}) {
