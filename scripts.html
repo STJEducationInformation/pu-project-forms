@@ -1,0 +1,68 @@
+<script>
+document.addEventListener("DOMContentLoaded", loadData);
+
+function saveData() {
+  const record = {
+    ID: document.getElementById("id")?.value || "",
+    ยุทธศาสตร์: document.getElementById("strategy").value,
+    วัตถุประสงค์: document.getElementById("objective").value,
+    เป้าหมาย: document.getElementById("goal").value,
+    KPI: document.getElementById("kpi").value,
+    ผู้รับผิดชอบ: document.getElementById("owner").value,
+    สถานะ: document.getElementById("status").value,
+    วันที่อัปเดต: new Date().toLocaleString()
+  };
+
+  if (record.ID) {
+    google.script.run.withSuccessHandler(loadData).updateData(record);
+  } else {
+    google.script.run.withSuccessHandler(loadData).addData(record);
+  }
+  document.getElementById("projectForm").reset();
+}
+
+function loadData() {
+  google.script.run.withSuccessHandler(renderTable).getData();
+}
+
+function renderTable(data) {
+  const tbody = document.querySelector("#dataTable tbody");
+  tbody.innerHTML = "";
+  data.forEach(r => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${r.ID}</td>
+      <td>${r.ยุทธศาสตร์}</td>
+      <td>${r.วัตถุประสงค์}</td>
+      <td>${r.เป้าหมาย}</td>
+      <td>${r.KPI}</td>
+      <td>${r.ผู้รับผิดชอบ}</td>
+      <td>${r.สถานะ}</td>
+      <td>
+        <button onclick='editRecord(${JSON.stringify(r)})'>แก้ไข</button>
+        <button onclick='deleteRecord("${r.ID}")'>ลบ</button>
+      </td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function editRecord(r) {
+  document.getElementById("strategy").value = r.ยุทธศาสตร์;
+  document.getElementById("objective").value = r.วัตถุประสงค์;
+  document.getElementById("goal").value = r.เป้าหมาย;
+  document.getElementById("kpi").value = r.KPI;
+  document.getElementById("owner").value = r.ผู้รับผิดชอบ;
+  document.getElementById("status").value = r.สถานะ;
+  const hiddenId = document.createElement("input");
+  hiddenId.type = "hidden";
+  hiddenId.id = "id";
+  hiddenId.value = r.ID;
+  document.getElementById("projectForm").appendChild(hiddenId);
+}
+
+function deleteRecord(id) {
+  if (confirm("ยืนยันการลบข้อมูลนี้?")) {
+    google.script.run.withSuccessHandler(loadData).deleteData(id);
+  }
+}
+</script>

@@ -1,300 +1,63 @@
 <!DOCTYPE html>
-<html lang="th">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ระบบบริหารโครงการ | โรงพยาบาลมหาวิทยาลัยพะเยา</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600&display=swap">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <style>
-    body { font-family: "Prompt", sans-serif; background-color: #f6f8fc; margin:0; padding:0; }
-   
-	.container { 
-  	max-width: 1520px; 
- 	margin: 70px auto; 
-  	background:white; 
-  	padding:30px; 
-  	border-radius:0; 
-  	box-shadow:0 4px 12px rgba(0,0,0,0.1);
-}
-
-    nav { display:flex; align-items:center; background-color:#4b0082; padding:10px 20px; color:white; justify-content:space-between; }
-    nav img { height:50px; }
-    .nav-buttons { display:flex; gap:15px; }
-    .nav-buttons button { background-color:#5c11a3; color:white; border:none; padding:8px 16px; border-radius:8px; cursor:pointer; transition:0.3s; }
-    .nav-buttons button:hover { background-color:#7b1dd5; }
-
-    .hidden { display:none; }
-
-    h1,h2 { color:#4b0082; text-align:center; }
-
-    .cards { display:flex; flex-wrap:wrap; gap:20px; justify-content:center; margin-top:20px; }
-    .card { flex:1 1 200px; background:#fff; padding:20px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.1); text-align:center; }
-    .card h3 { margin:10px 0; color:#4b0082; }
-    .card p { font-size:1.2em; font-weight:bold; }
-
-    table { width:100%; border-collapse:collapse; margin-top:20px; }
-    table, th, td { border:1px solid #ccc; }
-    th, td { padding:10px; text-align:center; }
-    th { background-color:#4b0082; color:white; }
-
-    label { font-weight:bold; display:block; margin-top:15px; }
-    input, textarea, select, button { width:100%; padding:10px; margin-top:5px; border-radius:8px; border:1px solid #ccc; }
-    button.submit { background:#4b0082; color:white; border:none; padding:12px 20px; border-radius:10px; margin-top:20px; cursor:pointer; }
-    button.submit:hover { background:#5c11a3; }
-
-    canvas { margin-top:40px; }
-
-    .section-title {
-      margin-top:30px;
-      background:#eee;
-      padding:10px;
-      border-radius:8px;
-      font-weight:bold;
-      color:#4b0082;
-    }
-  </style>
+  <base target="_top">
+  <?!= include('styles'); ?>
 </head>
 <body>
+  <h1>ระบบจัดการข้อมูลยุทธศาสตร์ โรงพยาบาลมหาวิทยาลัยพะเยา</h1>
 
-  <!-- Navbar -->
-  <nav>
-    <img src="https://healthserv.net/imghosp/hspmbz11020e240616093707.webp" alt="UP Logo">
-    <div class="nav-buttons">
-      <button onclick="showTab('dashboard')">หน้าหลัก</button>
-      <button onclick="showTab('report')">รายงานผลโครงการ</button>
-    </div>
-  </nav>
+  <form id="projectForm">
+    <label>ยุทธศาสตร์:</label>
+    <select id="strategy">
+      <option>ยุทธศาสตร์ที่ 1 : Modernized Human capital</option>
+      <option>ยุทธศาสตร์ที่ 2 : Excellence of Service and Healthcare</option>
+      <option>ยุทธศาสตร์ที่ 3 : Digital technology for AI transformation</option>
+      <option>ยุทธศาสตร์ที่ 4 : Uplifting Management Organization for sustainability</option>
+      <option>ยุทธศาสตร์ที่ 5 : Professional for Academic and Research</option>
+    </select>
 
-  <div class="container">
+    <label>วัตถุประสงค์เชิงกลยุทธ์:</label>
+    <textarea id="objective"></textarea>
 
-    <!-- Dashboard Tab -->
-    <div id="dashboard">
-      <h1>Dashboard การดำเนินงานโครงการ</h1>
+    <label>เป้าหมาย:</label>
+    <textarea id="goal"></textarea>
 
-      <div class="cards" id="summaryCards"></div>
+    <label>KPI:</label>
+    <textarea id="kpi"></textarea>
 
-      <h2>แผนการดำเนินงานทั้งหมด</h2>
-      <table id="projectTable">
-        <thead>
-          <tr>
-            <th>ชื่อโครงการ</th>
-            <th>ยุทธศาสตร์</th>
-            <th>เป้าหมาย</th>
-            <th>KPI</th>
-            <th>หน่วยงาน</th>
-            <th>งบประมาณ (บาท)</th>
-            <th>ระยะเวลา</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+    <label>ผู้รับผิดชอบ:</label>
+    <input id="owner" type="text"/>
 
-      <h2>สรุปงบประมาณตามยุทธศาสตร์</h2>
-      <canvas id="budgetChart" width="400" height="200"></canvas>
-    </div>
+    <label>สถานะ:</label>
+    <select id="status">
+      <option>ยังไม่เริ่ม</option>
+      <option>กำลังดำเนินการ</option>
+      <option>เสร็จสิ้น</option>
+    </select>
 
-    <!-- Report Tab -->
-    <div id="report" class="hidden">
-      <h1>แบบฟอร์มสำรวจรายละเอียดโครงการภายใต้แผนยุทธศาสตร์</h1>
-      <form id="projectForm">
-        
-        <div class="section-title">ส่วนที่ 1 : ข้อมูลทั่วไปของโครงการ</div>
-        <label>1. ชื่อโครงการ</label><input type="text" id="projectName" required>
-        <label>2. รหัสโครงการ</label><input type="text" placeholder="ไม่มี ไม่ต้องใส่" id="projectCode">
-        <label>3. สังกัด/หน่วยงานรับผิดชอบหลัก</label><input type="text" id="department">
-        <label>4. ผู้รับผิดชอบโครงการ</label><input type="text" id="responsiblePerson">
-        <label>5. หน่วยงานร่วมดำเนินการ</label><input type="text" id="collaborators">
-        <label>6. ระยะเวลาดำเนินงาน</label><input type="text" id="duration">
-        <label>7. สถานะโครงการ</label><input type="text" id="status">
+    <button type="button" onclick="saveData()">💾 บันทึกข้อมูล</button>
+    <button type="button" onclick="window.location='?page=dashboard'">📊 ดู Dashboard</button>
+  </form>
 
-        <div class="section-title">ส่วนที่ 2 : ความเชื่อมโยงกับยุทธศาสตร์</div>
-        <label>8. ยุทธศาสตร์หลัก</label>
-        <select id="strategy">
-          <option>ยุทธศาสตร์ที่ 1 : Modernized Human Capital</option>
-          <option>ยุทธศาสตร์ที่ 2 : Excellence of Service & Healthcare</option>
-          <option>ยุทธศาสตร์ที่ 3 : Digital Technology for AI Transformation</option>
-          <option>ยุทธศาสตร์ที่ 4 : Uplifting Management Organization</option>
-          <option>ยุทธศาสตร์ที่ 5 : Professional for Academic & Research</option>
-        </select>
-        <label>9. วัตถุประสงค์เชิงกลยุทธ์ (SO)</label><input type="text" id="objective">
-        <label>10. ตัวชี้วัดเชิงกลยุทธ์ (KPI)</label><input type="text" id="kpi">
+  <hr>
+  <h2>ข้อมูลทั้งหมด</h2>
+  <table id="dataTable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>ยุทธศาสตร์</th>
+        <th>วัตถุประสงค์</th>
+        <th>เป้าหมาย</th>
+        <th>KPI</th>
+        <th>ผู้รับผิดชอบ</th>
+        <th>สถานะ</th>
+        <th>จัดการ</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 
-        <div class="section-title">ส่วนที่ 3 : รายละเอียดโครงการ</div>
-        <label>11. หลักการและเหตุผล</label><textarea id="rationale" rows="3"></textarea>
-        <label>12. วัตถุประสงค์โครงการ</label><textarea id="purpose" rows="3"></textarea>
-        <label>13. เป้าหมาย/ผลลัพธ์ที่คาดหวัง</label><textarea id="goal" rows="3"></textarea>
-        <label>14. กิจกรรมหลัก</label><textarea id="activities" rows="2"></textarea>
-        <label>15. กลุ่มเป้าหมาย</label><input type="text" id="targetGroup">
-        <label>16. พื้นที่ดำเนินการ</label><input type="text" id="location">
-        <label>17. ตัวชี้วัดความสำเร็จโครงการ</label><textarea id="successIndicators" rows="2"></textarea>
-
-        <div class="section-title">ส่วนที่ 4 : งบประมาณและทรัพยากร</div>
-        <label>18. งบประมาณรวม (บาท)</label><input type="number" id="budget">
-        <label>19. แหล่งงบประมาณ</label><input type="text" id="budgetSource">
-        <label>20. รายละเอียดการใช้งบประมาณ</label><textarea id="budgetDetails" rows="2"></textarea>
-        <label>21. บุคลากรที่เกี่ยวข้อง</label><input type="text" id="relatedStaff">
-
-        <div class="section-title">ส่วนที่ 5 : การติดตามและประเมินผล</div>
-        <label>22. วิธีการติดตาม</label><textarea id="trackingMethod" rows="2"></textarea>
-        <label>23. รอบระยะเวลาการรายงานผล</label><input type="text" id="reportPeriod">
-        <label>24. ตัวชี้วัดผลสัมฤทธิ์ (Outcome KPI)</label><textarea id="outcomeKPI" rows="2"></textarea>
-        <label>25. ปัญหา/อุปสรรค</label><textarea id="problems" rows="2"></textarea>
-        <label>26. ข้อเสนอแนะ</label><textarea id="suggestions" rows="2"></textarea>
-
-        <div class="section-title">ส่วนที่ 6 : การรับรองข้อมูล</div>
-        <label>27. ชื่อผู้จัดทำแบบฟอร์ม</label><input type="text" id="creatorName">
-        <label>28. ตำแหน่ง</label><input type="text" id="creatorPosition">
-        <label>29. วันที่จัดทำ</label><input type="date" id="createdDate">
-        <label>30. ความเห็นของหัวหน้าหน่วยงาน</label><textarea id="managerComment" rows="2"></textarea>
-
-        <button type="submit" class="submit">ส่งข้อมูล</button>
-        <button type="button" class="submit" style="background:#008CBA;" onclick="downloadPDF()">รายงานโครงการ (PDF)</button>
-      </form>
-
-      <p id="msg" style="text-align:center; color:green; font-weight:bold; margin-top:10px;"></p>
-    </div>
-  </div>
-
-<script>
-  function showTab(tab) {
-    document.getElementById('dashboard').classList.add('hidden');
-    document.getElementById('report').classList.add('hidden');
-    document.getElementById(tab).classList.remove('hidden');
-  }
-
-  async function fetchData() {
-    const response = await fetch("https://script.google.com/macros/s/AKfycbxTtX-aAtgoAmBN31ftO8ufJBucir6-m4eR-H67OdvUYAKtmgRmpmzpm-JZ68W3V-PY/exec?action=getData");
-    const data = await response.json();
-    return data;
-  }
-
-  function renderSummaryCards(data) {
-    const cardsContainer = document.getElementById("summaryCards");
-    cardsContainer.innerHTML = "";
-
-    const totalProjects = data.length;
-    const totalBudget = data.reduce((sum,item)=>sum+(parseFloat(item.budget)||0),0);
-    const kpiSet = new Set(data.map(item=>item.kpi).filter(Boolean));
-
-    const cardData = [
-      { title:"จำนวนโครงการ", value:totalProjects, color:"#4b0082" },
-      { title:"งบประมาณรวม (บาท)", value:totalBudget.toLocaleString(), color:"#5c11a3" },
-      { title:"KPI ทั้งหมด", value:kpiSet.size, color:"#7b1dd5" }
-    ];
-
-    cardData.forEach(c=>{
-      const div = document.createElement("div");
-      div.className="card";
-      div.style.borderTop=`4px solid ${c.color}`;
-      div.innerHTML=`<h3>${c.title}</h3><p>${c.value}</p>`;
-      cardsContainer.appendChild(div);
-    });
-  }
-
-  function renderTable(data) {
-    const tbody = document.querySelector("#projectTable tbody");
-    tbody.innerHTML = "";
-    data.forEach(item => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${item.projectName}</td>
-        <td>${item.strategy}</td>
-        <td>${item.goal}</td>
-        <td>${item.kpi}</td>
-        <td>${item.department}</td>
-        <td>${item.budget}</td>
-        <td>${item.duration}</td>
-      `;
-      tbody.appendChild(tr);
-    });
-  }
-
-  function renderChart(data) {
-    const strategyMap = {};
-    data.forEach(item=>{
-      if(!strategyMap[item.strategy]) strategyMap[item.strategy]=0;
-      strategyMap[item.strategy]+=parseFloat(item.budget)||0;
-    });
-
-    const ctx = document.getElementById("budgetChart").getContext("2d");
-    new Chart(ctx,{
-      type:"bar",
-      data:{
-        labels:Object.keys(strategyMap),
-        datasets:[{
-          label:'งบประมาณรวม (บาท)',
-          data:Object.values(strategyMap),
-          backgroundColor:["#4b0082","#5c11a3","#7b1dd5","#9c4dcc","#b874ff"]
-        }]
-      },
-      options:{
-        responsive:true,
-        plugins:{
-          legend:{ display:false },
-          title:{ display:true, text:'งบประมาณรวมต่อยุทธศาสตร์' }
-        }
-      }
-    });
-  }
-
-  async function init() {
-    try {
-      const data = await fetchData();
-      renderSummaryCards(data);
-      renderTable(data);
-      renderChart(data);
-    } catch (e) {
-      console.log("⚠️ ไม่สามารถดึงข้อมูลได้:", e);
-    }
-  }
-
-  init();
-
-  const form = document.getElementById("projectForm");
-  const msg = document.getElementById("msg");
-
-  form.addEventListener("submit", async (e)=>{
-    e.preventDefault();
-    msg.textContent="กำลังบันทึกข้อมูล...";
-
-    const data = {};
-    form.querySelectorAll("input, textarea, select").forEach(el=>{
-      data[el.id]=el.value;
-    });
-
-    await fetch("https://script.google.com/macros/s/AKfycbxTtX-aAtgoAmBN31ftO8ufJBucir6-m4eR-H67OdvUYAKtmgRmpmzpm-JZ68W3V-PY/exec", {
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body:JSON.stringify(data)
-    });
-
-    msg.textContent="✅ บันทึกสำเร็จแล้ว!";
-    form.reset();
-    init();
-    showTab('dashboard');
-  });
-
-  async function downloadPDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
-
-    doc.setFontSize(16);
-    doc.text("แบบฟอร์มสำรวจรายละเอียดโครงการ", 20, 20);
-    let y = 30;
-    document.querySelectorAll("#projectForm input, #projectForm textarea, #projectForm select").forEach(el => {
-      const label = el.previousElementSibling ? el.previousElementSibling.innerText : "";
-      if (el.value.trim()) {
-        doc.text(`${label}: ${el.value}`, 20, y);
-        y += 8;
-        if (y > 270) { doc.addPage(); y = 20; }
-      }
-    });
-    doc.save("รายงานโครงการ.pdf");
-  }
-</script>
-
+  <?!= include('scripts'); ?>
 </body>
 </html>
-ติดต่อสอบถาม สิทธิพล ใจเย็น (เบ็ค) งานแผนและพัสดุ 093-715-7167
