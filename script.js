@@ -1,11 +1,11 @@
-const SHEET_API_URL = "YOUR_WEB_APP_URL"; // <-- วาง URL จาก Google Apps Script Web App
+const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbzs8i5LuD2A4Gmofxae7kdtP-Wd3gygz1nk264GUMiULHLgVViu1qSuTtyUm0KWV36NOg/exec"; // <-- วาง URL จาก Google Apps Script Web App
 
 document.addEventListener("DOMContentLoaded", async () => {
   await loadStrategicOptions();
 });
 
 async function loadStrategicOptions() {
-  const res = await fetch(`${https://script.google.com/macros/s/AKfycbzs8i5LuD2A4Gmofxae7kdtP-Wd3gygz1nk264GUMiULHLgVViu1qSuTtyUm0KWV36NOg/exec}?action=getStrategicData`);
+  const res = await fetch(`${YOUR_WEB_APP_URL}?action=getStrategicData`);
   const data = await res.json();
 
   const strategySelect = document.getElementById("strategySelect");
@@ -53,3 +53,4 @@ document.getElementById("projectForm").addEventListener("submit", async (e) => {
   const result = await res.json();
   alert(result.message);
 });
+
