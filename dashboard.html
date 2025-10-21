@@ -1,39 +1,120 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <title>Dashboard โครงการ</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dashboard - สรุปโครงการ</title>
+  <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-gray-100">
-  <header class="bg-green-700 text-white p-4 text-center text-xl font-semibold shadow">
-    Dashboard สรุปข้อมูลโครงการ โรงพยาบาลมหาวิทยาลัยพะเยา
+<body class="bg-gray-50">
+  <header class="header">
+    <div class="header-inner">
+      <h1>Dashboard สรุปโครงการ</h1>
+      <p class="muted">สรุปผลและกราฟ — โรงพยาบาลมหาวิทยาลัยพะเยา</p>
+    </div>
   </header>
 
-  <main class="p-6 max-w-6xl mx-auto">
-    <canvas id="chartStatus" height="100"></canvas>
-    <canvas id="chartBudget" height="100" class="mt-8"></canvas>
+  <main class="container">
+    <section class="card">
+      <h2 class="card-title">สรุปภาพรวม</h2>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+        <div class="card" id="stat-total">รวมโครงการ: —</div>
+        <div class="card" id="stat-budget">งบประมาณรวม: —</div>
+        <div class="card" id="stat-status">สถานะ (เสร็จ/ต่อเนื่อง/ยกเลิก): —</div>
+      </div>
+    </section>
+
+    <section class="card mt">
+      <h2 class="card-title">กราฟสถานะโครงการ</h2>
+      <canvas id="statusChart" height="100"></canvas>
+    </section>
+
+    <section class="card mt">
+      <h2 class="card-title">กราฟงบประมาณตามยุทธศาสตร์</h2>
+      <canvas id="budgetChart" height="120"></canvas>
+    </section>
+
+    <section class="card mt">
+      <h2 class="card-title">ตารางข้อมูล (เต็ม)</h2>
+      <div class="table-wrap">
+        <table id="fullTable"><thead></thead><tbody></tbody></table>
+      </div>
+    </section>
   </main>
 
-  <script>
-    const ctx1 = document.getElementById("chartStatus");
-    new Chart(ctx1, {
-      type: "pie",
-      data: {
-        labels: ["เสร็จสิ้น", "ต่อเนื่อง", "ยกเลิก"],
-        datasets: [{ data: [10, 5, 2] }]
-      }
-    });
+  <footer class="footer">© โรงพยาบาลมหาวิทยาลัยพะเยา</footer>
 
-    const ctx2 = document.getElementById("chartBudget");
-    new Chart(ctx2, {
-      type: "bar",
-      data: {
-        labels: ["ยุทธศาสตร์ 1", "ยุทธศาสตร์ 2"],
-        datasets: [{ data: [120000, 80000], label: "งบประมาณ (บาท)" }]
-      }
-    });
+  <script>
+    const API_URL = "YOUR_WEBAPP_EXEC_URL_HERE"; // แก้เป็นของคุณ
+
+    async function callApi(action, payload = {}) {
+      const url = API_URL + '?action=' + encodeURIComponent(action);
+      const r = await fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+      const t = await r.text();
+      try { return JSON.parse(t); } catch(e){ return t; }
+    }
+
+    async function loadDashboard(){
+      const data = await callApi('read', {});
+      const rows = Array.isArray(data) ? data : [];
+
+      // total projects
+      document.getElementById('stat-total').textContent = 'รวมโครงการ: ' + rows.length;
+
+      // budget total (sum column "งบประมาณรวม" - try parse)
+      let totalBudget = 0;
+      const statusCounts = { 'เสร็จสิ้น':0, 'ต่อเนื่อง':0, 'ยกเลิก':0, 'อื่นๆ':0 };
+      const byStrategy = {};
+      rows.forEach(r => {
+        const b = parseFloat((r['งบประมาณรวม'] || "").toString().replace(/[^0-9.-]+/g,"")) || 0;
+        totalBudget += b;
+        const st = (r['สถานะโครงการ'] || '').trim();
+        if (st.includes('เสร็จ')) statusCounts['เสร็จสิ้น']++;
+        else if (st.includes('ต่อ')) statusCounts['ต่อเนื่อง']++;
+        else if (st.includes('ยก')) statusCounts['ยกเลิก']++;
+        else statusCounts['อื่นๆ']++;
+        const strat = r['ยุทธศาสตร์หลัก'] || 'ไม่ระบุ';
+        byStrategy[strat] = (byStrategy[strat] || 0) + b;
+      });
+
+      document.getElementById('stat-budget').textContent = 'งบประมาณรวม: ' + totalBudget.toLocaleString('en-US', {maximumFractionDigits:0}) + ' บาท';
+      document.getElementById('stat-status').textContent = `สถานะ — เสร็จสิ้น:${statusCounts['เสร็จสิ้น']}, ต่อเนื่อง:${statusCounts['ต่อเนื่อง']}, ยกเลิก:${statusCounts['ยกเลิก']}`;
+
+      // status pie chart
+      const ctx1 = document.getElementById('statusChart').getContext('2d');
+      new Chart(ctx1, {
+        type:'pie',
+        data:{
+          labels: ['เสร็จสิ้น','ต่อเนื่อง','ยกเลิก','อื่นๆ'],
+          datasets:[{ data: [statusCounts['เสร็จสิ้น'], statusCounts['ต่อเนื่อง'], statusCounts['ยกเลิก'], statusCounts['อื่นๆ']] }]
+        }
+      });
+
+      // budget bar chart by strategy (top 8)
+      const sorted = Object.entries(byStrategy).sort((a,b)=>b[1]-a[1]).slice(0,8);
+      const ctx2 = document.getElementById('budgetChart').getContext('2d');
+      new Chart(ctx2, {
+        type:'bar',
+        data:{
+          labels: sorted.map(s=>s[0]),
+          datasets:[{ label:'งบประมาณ (บาท)', data: sorted.map(s=>s[1]) }]
+        },
+        options:{ indexAxis: 'y' }
+      });
+
+      // full table
+      const thead = document.querySelector('#fullTable thead');
+      const tbody = document.querySelector('#fullTable tbody');
+      thead.innerHTML = '';
+      tbody.innerHTML = '';
+      if (rows.length===0) { thead.innerHTML='<tr><th>ไม่มีข้อมูล</th></tr>'; return; }
+      const headers = Object.keys(rows[0]);
+      thead.innerHTML = '<tr>' + headers.map(h=>`<th>${h}</th>`).join('') + '</tr>';
+      tbody.innerHTML = rows.map(r => '<tr>' + headers.map(h=>`<td>${(r[h]||'')}</td>`).join('') + '</tr>').join('');
+    }
+
+    loadDashboard();
   </script>
 </body>
 </html>
