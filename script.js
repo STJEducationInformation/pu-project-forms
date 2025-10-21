@@ -12,7 +12,7 @@
 
 /* ==================  CONFIG  ================== */
 // แก้เป็น URL ของคุณ (Web App URL จาก Apps Script Deploy)
-const API_URL = "https://script.google.com/macros/s/AKfycbyKvk0cDsR-0dwwbon3Zi_wKGDARSeBvr9oRVZdsdJmvYqxEBtETsCDhCJ13-KdCIIu1g/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbw2NSrZKe-2EIh_s6UxxMGVGHqDypsuBFDI_DxNdMW-YG0qKN3e8qhnzQRqiC-PKhtkTg/exec";
 
 /* ==================  DATA MAPPING (ยุทธศาสตร์ / SO / KPI)  ==================
    นี่คือ mapping ที่นำมาจากข้อความยุทธศาสตร์ที่คุณส่งมา
