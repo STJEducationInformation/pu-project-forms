@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 async function loadStrategicOptions() {
-  const res = await fetch(`${SHEET_API_URL}?action=getStrategicData`);
+  const res = await fetch(`${https://script.google.com/macros/s/AKfycbzs8i5LuD2A4Gmofxae7kdtP-Wd3gygz1nk264GUMiULHLgVViu1qSuTtyUm0KWV36NOg/exec}?action=getStrategicData`);
   const data = await res.json();
 
   const strategySelect = document.getElementById("strategySelect");
