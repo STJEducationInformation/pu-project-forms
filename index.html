@@ -3,109 +3,100 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>แบบฟอร์มโครงการ - โรงพยาบาลมหาวิทยาลัยพะเยา</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script defer src="script.js"></script>
+  <title>บันทึกข้อมูลโครงการ - โรงพยาบาลมหาวิทยาลัยพะเยา</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-light">
-  <div class="container my-5">
-    <div class="text-center mb-4">
-      <h3>แบบฟอร์มรายละเอียดโครงการตามแผนยุทธศาสตร์</h3>
-      <p>โรงพยาบาลมหาวิทยาลัยพะเยา</p>
-    </div>
+<body class="bg-gray-100 text-gray-800">
+  <header class="bg-blue-700 text-white p-4 text-center text-xl font-semibold shadow">
+    ระบบบันทึกข้อมูลโครงการตามแผนยุทธศาสตร์ โรงพยาบาลมหาวิทยาลัยพะเยา
+  </header>
 
-    <form id="projectForm" class="card p-4 shadow">
-      <h5 class="mb-3">ส่วนที่ 1 : ข้อมูลทั่วไปของโครงการ</h5>
-      <div class="row mb-3">
-        <div class="col-md-6">
-          <label class="form-label">1. ชื่อโครงการ</label>
-          <input type="text" name="projectName" class="form-control" required>
+  <main class="p-6 max-w-6xl mx-auto">
+    <!-- ฟอร์มหลัก -->
+    <form id="projectForm" class="bg-white shadow-lg rounded-2xl p-6 space-y-4">
+
+      <!-- ส่วนที่ 1 -->
+      <h2 class="text-lg font-semibold border-b pb-1">🟦 ส่วนที่ 1 : ข้อมูลทั่วไปของโครงการ</h2>
+      <div class="grid grid-cols-2 gap-4">
+        <input name="ชื่อโครงการ" placeholder="ชื่อโครงการ" class="input" required>
+        <input name="รหัสโครงการ" placeholder="รหัสโครงการ" class="input">
+        <input name="หน่วยงานหลัก" placeholder="สังกัด/หน่วยงานรับผิดชอบหลัก" class="input">
+        <input name="ผู้รับผิดชอบโครงการ" placeholder="ผู้รับผิดชอบโครงการ" class="input">
+        <input name="หน่วยงานร่วม" placeholder="หน่วยงานร่วมดำเนินการ" class="input">
+        <div>
+          <label>ระยะเวลาดำเนินงาน</label>
+          <div class="flex gap-2">
+            <input type="date" name="วันที่เริ่มต้น" class="input">
+            <input type="date" name="วันที่สิ้นสุด" class="input">
+          </div>
         </div>
-        <div class="col-md-3">
-          <label class="form-label">2. รหัสโครงการ</label>
-          <input type="text" name="projectCode" class="form-control">
-        </div>
-        <div class="col-md-3">
-          <label class="form-label">3. หน่วยงานรับผิดชอบหลัก</label>
-          <input type="text" name="department" class="form-control">
-        </div>
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">4. ผู้รับผิดชอบโครงการ</label>
-        <input type="text" name="owner" class="form-control">
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">5. หน่วยงานร่วมดำเนินการ</label>
-        <input type="text" name="collaborator" class="form-control">
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">6. ระยะเวลาดำเนินงาน</label>
-        <input type="text" name="duration" class="form-control">
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">7. สถานะโครงการ</label>
-        <select name="status" class="form-select">
-          <option value="ใหม่">โครงการใหม่</option>
-          <option value="ต่อเนื่อง">โครงการต่อเนื่อง</option>
+        <select name="สถานะโครงการ" class="input">
+          <option>โครงการใหม่</option>
+          <option>โครงการต่อเนื่อง</option>
+          <option>ยกเลิก</option>
         </select>
       </div>
 
-      <hr>
-      <h5 class="mb-3">ส่วนที่ 2 : ความเชื่อมโยงกับยุทธศาสตร์</h5>
-
-      <div class="mb-3">
-        <label class="form-label">8. ยุทธศาสตร์หลัก</label>
-        <select id="strategySelect" name="strategy" class="form-select" required></select>
+      <!-- ส่วนที่ 2 -->
+      <h2 class="text-lg font-semibold border-b pb-1 mt-6">🟩 ส่วนที่ 2 : ความเชื่อมโยงกับยุทธศาสตร์</h2>
+      <div class="grid grid-cols-3 gap-4">
+        <select id="strategy" name="ยุทธศาสตร์หลัก" class="input"></select>
+        <select id="so" name="วัตถุประสงค์เชิงกลยุทธ์ (SO)" class="input"></select>
+        <select id="kpi" name="ตัวชี้วัดเชิงกลยุทธ์ (KPI)" class="input"></select>
       </div>
 
-      <div class="mb-3">
-        <label class="form-label">9. วัตถุประสงค์เชิงกลยุทธ์ (SO)</label>
-        <select id="soSelect" name="strategicObjective" class="form-select" required></select>
+      <!-- ส่วนที่ 3 -->
+      <h2 class="text-lg font-semibold border-b pb-1 mt-6">🟨 ส่วนที่ 3 : รายละเอียดโครงการ</h2>
+      <textarea name="หลักการและเหตุผล" placeholder="หลักการและเหตุผล" class="input"></textarea>
+      <textarea name="วัตถุประสงค์โครงการ" placeholder="วัตถุประสงค์โครงการ" class="input"></textarea>
+      <textarea name="เป้าหมาย/ผลลัพธ์ที่คาดหวัง" placeholder="เป้าหมาย/ผลลัพธ์ที่คาดหวัง" class="input"></textarea>
+      <textarea name="กิจกรรมหลัก" placeholder="กิจกรรมหลัก" class="input"></textarea>
+      <input name="กลุ่มเป้าหมาย" placeholder="กลุ่มเป้าหมาย" class="input">
+      <input name="พื้นที่ดำเนินการ" placeholder="พื้นที่ดำเนินการ" class="input">
+      <textarea name="ตัวชี้วัดความสำเร็จโครงการ" placeholder="ตัวชี้วัดความสำเร็จโครงการ" class="input"></textarea>
+
+      <!-- ส่วนที่ 4 -->
+      <h2 class="text-lg font-semibold border-b pb-1 mt-6">🟥 ส่วนที่ 4 : งบประมาณและทรัพยากร</h2>
+      <div class="grid grid-cols-2 gap-4">
+        <input type="number" name="งบประมาณรวม" placeholder="งบประมาณรวม (บาท)" class="input">
+        <input name="แหล่งงบประมาณ" placeholder="แหล่งงบประมาณ" class="input">
+        <textarea name="รายละเอียดการใช้งบประมาณ" placeholder="รายละเอียดการใช้งบประมาณ" class="input"></textarea>
+        <input name="บุคลากรที่เกี่ยวข้อง" placeholder="บุคลากรที่เกี่ยวข้อง" class="input">
       </div>
 
-      <div class="mb-3">
-        <label class="form-label">10. ตัวชี้วัดเชิงกลยุทธ์ (KPI)</label>
-        <select id="kpiSelect" name="kpi" class="form-select" required></select>
+      <!-- ส่วนที่ 5 -->
+      <h2 class="text-lg font-semibold border-b pb-1 mt-6">🟧 ส่วนที่ 5 : การติดตามและประเมินผล</h2>
+      <textarea name="วิธีการติดตาม" placeholder="วิธีการติดตาม" class="input"></textarea>
+      <input name="รอบระยะเวลาการรายงานผล" placeholder="รอบระยะเวลาการรายงานผล" class="input">
+      <textarea name="ตัวชี้วัดผลสัมฤทธิ์" placeholder="ตัวชี้วัดผลสัมฤทธิ์ (Outcome KPI)" class="input"></textarea>
+      <textarea name="ปัญหา/อุปสรรค" placeholder="ปัญหา/อุปสรรค" class="input"></textarea>
+      <textarea name="ข้อเสนอแนะ" placeholder="ข้อเสนอแนะ" class="input"></textarea>
+
+      <!-- ส่วนที่ 6 -->
+      <h2 class="text-lg font-semibold border-b pb-1 mt-6">🟪 ส่วนที่ 6 : การรับรองข้อมูล</h2>
+      <div class="grid grid-cols-2 gap-4">
+        <input name="ชื่อผู้จัดทำแบบฟอร์ม" placeholder="ชื่อผู้จัดทำแบบฟอร์ม" class="input">
+        <input name="ตำแหน่ง" placeholder="ตำแหน่ง" class="input">
+        <input type="date" name="วันที่จัดทำ" class="input">
+        <textarea name="ความเห็นของหัวหน้าหน่วยงาน" placeholder="ความเห็นของหัวหน้าหน่วยงาน" class="input"></textarea>
       </div>
 
-      <hr>
-      <h5 class="mb-3">ส่วนที่ 3 : รายละเอียดโครงการ</h5>
-
-      <div class="mb-3">
-        <label class="form-label">11. หลักการและเหตุผล</label>
-        <textarea name="rationale" class="form-control" rows="3"></textarea>
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">12. วัตถุประสงค์โครงการ</label>
-        <textarea name="objectives" class="form-control" rows="2"></textarea>
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">13. เป้าหมาย/ผลลัพธ์ที่คาดหวัง</label>
-        <textarea name="expectedResults" class="form-control" rows="2"></textarea>
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">14. กิจกรรมหลัก</label>
-        <textarea name="mainActivities" class="form-control" rows="2"></textarea>
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">15. กลุ่มเป้าหมาย</label>
-        <textarea name="targetGroup" class="form-control" rows="2"></textarea>
-      </div>
-
-      <hr>
-      <div class="text-center mt-4">
-        <button type="submit" class="btn btn-primary px-4">บันทึกข้อมูล</button>
+      <div class="flex gap-4 mt-6">
+        <button type="submit" class="btn bg-blue-600 hover:bg-blue-700">บันทึกข้อมูล</button>
+        <button type="reset" class="btn bg-gray-400 hover:bg-gray-500">ล้างฟอร์ม</button>
       </div>
     </form>
-  </div>
+
+    <hr class="my-8">
+
+    <!-- ตารางแสดงข้อมูล -->
+    <div>
+      <h2 class="text-lg font-semibold mb-2">📋 รายการโครงการทั้งหมด</h2>
+      <table id="projectTable" class="table-auto w-full border text-sm"></table>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
 </body>
 </html>

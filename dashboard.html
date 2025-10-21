@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard โครงการ</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-100">
+  <header class="bg-green-700 text-white p-4 text-center text-xl font-semibold shadow">
+    Dashboard สรุปข้อมูลโครงการ โรงพยาบาลมหาวิทยาลัยพะเยา
+  </header>
+
+  <main class="p-6 max-w-6xl mx-auto">
+    <canvas id="chartStatus" height="100"></canvas>
+    <canvas id="chartBudget" height="100" class="mt-8"></canvas>
+  </main>
+
+  <script>
+    const ctx1 = document.getElementById("chartStatus");
+    new Chart(ctx1, {
+      type: "pie",
+      data: {
+        labels: ["เสร็จสิ้น", "ต่อเนื่อง", "ยกเลิก"],
+        datasets: [{ data: [10, 5, 2] }]
+      }
+    });
+
+    const ctx2 = document.getElementById("chartBudget");
+    new Chart(ctx2, {
+      type: "bar",
+      data: {
+        labels: ["ยุทธศาสตร์ 1", "ยุทธศาสตร์ 2"],
+        datasets: [{ data: [120000, 80000], label: "งบประมาณ (บาท)" }]
+      }
+    });
+  </script>
+</body>
+</html>
