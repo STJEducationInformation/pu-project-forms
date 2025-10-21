@@ -172,7 +172,7 @@
 
   // --- Fetch Data & Render Dashboard ---
   async function fetchData() {
-    const response = await fetch("https://script.google.com/macros/s/AKfycbzoI4SK1e4zYNp7vdM3RSYqVgbiW9CY6Klf49ONCJcoT5C2Cu0vsTHoJokGCx-vvWTu1g/exec?action=getData");
+    const response = await fetch("https://script.google.com/macros/s/AKfycbxTtX-aAtgoAmBN31ftO8ufJBucir6-m4eR-H67OdvUYAKtmgRmpmzpm-JZ68W3V-PY/exec?action=getData");
     const data = await response.json();
     return data;
   }
@@ -274,10 +274,14 @@
       data[el.id]=el.value;
     });
 
-    await fetch("https://script.google.com/macros/s/AKfycbzoI4SK1e4zYNp7vdM3RSYqVgbiW9CY6Klf49ONCJcoT5C2Cu0vsTHoJokGCx-vvWTu1g/exec",{
-      method:"POST",
-      body: JSON.stringify(data)
-    }); 
+    await fetch("https://script.google.com/macros/s/AKfycbxTtX-aAtgoAmBN31ftO8ufJBucir6-m4eR-H67OdvUYAKtmgRmpmzpm-JZ68W3V-PY/exec", {
+-  method:"POST",
+-  body: JSON.stringify(data)
++  method: "POST",
++  headers: { "Content-Type": "application/json" },
++  body: JSON.stringify(data)
+});
+ 
 
     msg.textContent="✅ บันทึกสำเร็จแล้ว!";
     form.reset();
