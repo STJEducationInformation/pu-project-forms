@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>แบบฟอร์มโครงการ - โรงพยาบาลมหาวิทยาลัยพะเยา</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script defer src="script.js"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="bg-light">
+  <div class="container my-5">
+    <div class="text-center mb-4">
+      <h3>แบบฟอร์มรายละเอียดโครงการตามแผนยุทธศาสตร์</h3>
+      <p>โรงพยาบาลมหาวิทยาลัยพะเยา</p>
+    </div>
+
+    <form id="projectForm" class="card p-4 shadow">
+      <h5 class="mb-3">ส่วนที่ 1 : ข้อมูลทั่วไปของโครงการ</h5>
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label class="form-label">1. ชื่อโครงการ</label>
+          <input type="text" name="projectName" class="form-control" required>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">2. รหัสโครงการ</label>
+          <input type="text" name="projectCode" class="form-control">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">3. หน่วยงานรับผิดชอบหลัก</label>
+          <input type="text" name="department" class="form-control">
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">4. ผู้รับผิดชอบโครงการ</label>
+        <input type="text" name="owner" class="form-control">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">5. หน่วยงานร่วมดำเนินการ</label>
+        <input type="text" name="collaborator" class="form-control">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">6. ระยะเวลาดำเนินงาน</label>
+        <input type="text" name="duration" class="form-control">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">7. สถานะโครงการ</label>
+        <select name="status" class="form-select">
+          <option value="ใหม่">โครงการใหม่</option>
+          <option value="ต่อเนื่อง">โครงการต่อเนื่อง</option>
+        </select>
+      </div>
+
+      <hr>
+      <h5 class="mb-3">ส่วนที่ 2 : ความเชื่อมโยงกับยุทธศาสตร์</h5>
+
+      <div class="mb-3">
+        <label class="form-label">8. ยุทธศาสตร์หลัก</label>
+        <select id="strategySelect" name="strategy" class="form-select" required></select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">9. วัตถุประสงค์เชิงกลยุทธ์ (SO)</label>
+        <select id="soSelect" name="strategicObjective" class="form-select" required></select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">10. ตัวชี้วัดเชิงกลยุทธ์ (KPI)</label>
+        <select id="kpiSelect" name="kpi" class="form-select" required></select>
+      </div>
+
+      <hr>
+      <h5 class="mb-3">ส่วนที่ 3 : รายละเอียดโครงการ</h5>
+
+      <div class="mb-3">
+        <label class="form-label">11. หลักการและเหตุผล</label>
+        <textarea name="rationale" class="form-control" rows="3"></textarea>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">12. วัตถุประสงค์โครงการ</label>
+        <textarea name="objectives" class="form-control" rows="2"></textarea>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">13. เป้าหมาย/ผลลัพธ์ที่คาดหวัง</label>
+        <textarea name="expectedResults" class="form-control" rows="2"></textarea>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">14. กิจกรรมหลัก</label>
+        <textarea name="mainActivities" class="form-control" rows="2"></textarea>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">15. กลุ่มเป้าหมาย</label>
+        <textarea name="targetGroup" class="form-control" rows="2"></textarea>
+      </div>
+
+      <hr>
+      <div class="text-center mt-4">
+        <button type="submit" class="btn btn-primary px-4">บันทึกข้อมูล</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

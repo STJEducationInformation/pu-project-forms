@@ -1,0 +1,9 @@
+body {
+  font-family: "Prompt", sans-serif;
+}
+.card {
+  border-radius: 16px;
+}
+button {
+  border-radius: 12px;
+}
